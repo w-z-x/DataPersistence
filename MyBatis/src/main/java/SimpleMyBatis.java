@@ -24,7 +24,7 @@ public class SimpleMyBatis {
 
         try (Connection conn = DriverManager.getConnection(H2_INITIAL_URL, H2_USER, H2_PWD);
              Statement statement = conn.createStatement()) {
-            statement.execute("CREATE TABLE user(id INT PRIMARY KEY, name VARCHAR(255))");
+            statement.execute("CREATE TABLE user(ID INT PRIMARY KEY, NAME VARCHAR(255))");
             statement.execute("INSERT INTO user VALUES(0, 'Jack Jones')");
         }
 
