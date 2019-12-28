@@ -15,17 +15,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @Slf4j
-public class Test {
+public class SimpleMyBatis {
     public static void main(String[] args) throws SQLException {
-        try (Connection conn = DriverManager.getConnection("jdbc:h2:mem:test", "bart", "51mp50n");
-             Statement statement = conn.createStatement()){
+        final String H2_INITIAL_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
+        final String H2_USER = "sa";
+        final String H2_PWD = "c2#D1";
+        final String H2_URL = "jdbc:h2:mem:test";
+
+        try (Connection conn = DriverManager.getConnection(H2_INITIAL_URL, H2_USER, H2_PWD);
+             Statement statement = conn.createStatement()) {
             statement.execute("CREATE TABLE user(id INT PRIMARY KEY, name VARCHAR(255))");
+            statement.execute("INSERT INTO user VALUES(0, 'Jack Jones')");
         }
 
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:h2:mem:test");
-        config.setUsername("bart");
-        config.setPassword("51mp50n");
+        config.setJdbcUrl(H2_URL);
+        config.setUsername(H2_USER);
+        config.setPassword(H2_PWD);
         HikariDataSource dataSource = new HikariDataSource(config);
 
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
@@ -36,7 +42,8 @@ public class Test {
 
         try (SqlSession session = sqlSessionFactory.openSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
-            User user = mapper.selectUser(101);
+            User user = mapper.selectUser(0);
+            log.info("{}", user);
         }
     }
 }
