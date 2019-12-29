@@ -11,13 +11,18 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 @Slf4j
 public class SimpleMyBatis {
     public static void main(String[] args) throws SQLException {
-//        final String URL = "jdbc:h2:tcp://localhost/~/test";
+
+        // 初始化H2数据库
         final String URL = "jdbc:h2:mem:test";
+//        final String URL = "jdbc:h2:tcp://localhost/~/test";
         final String USER = "sa";
         final String PWD = "";
         try (Connection conn = DriverManager.getConnection(URL+";DB_CLOSE_DELAY=-1", USER, PWD);
@@ -29,19 +34,23 @@ public class SimpleMyBatis {
                     "INSERT INTO USER VALUES(2, '王五', '温州')");
         }
 
+        // 创建HikariCP数据库连接池
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(URL);
         config.setUsername(USER);
         config.setPassword(PWD);
         HikariDataSource dataSource = new HikariDataSource(config);
 
+        // 创建SqlSessionFactory
         TransactionFactory transactionFactory = new JdbcTransactionFactory();
         Environment environment = new Environment("development", transactionFactory, dataSource);
         Configuration configuration = new Configuration(environment);
-        configuration.getTypeAliasRegistry().registerAliases("entities");
-        configuration.addMappers("mappers");
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+        configuration.getTypeAliasRegistry().registerAlias(User.class);
+        configuration.addMapper(UserMapper.class);
+        SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+        SqlSessionFactory sqlSessionFactory = builder.build(configuration);
 
+        // 执行查询
         try (SqlSession session = sqlSessionFactory.openSession()) {
             UserMapper mapper = session.getMapper(UserMapper.class);
             User user = mapper.selectUser(0);
