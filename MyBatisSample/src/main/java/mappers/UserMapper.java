@@ -1,14 +1,21 @@
 package mappers;
 
-import entities.User;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import entities.UserEntity;
+import org.apache.ibatis.annotations.*;
 
 public interface UserMapper {
+    @Insert("INSERT INTO USER VALUES(#{id}, #{name}, #{address})")
+    int insertUser(UserEntity user);
+
     @Results(id = "userResult", value = {
             @Result(property = "address", column = "_address")
     })
-    @Select("SELECT * FROM USER WHERE ID = #{id}")
-    User selectUser(int id);
+    @Select("SELECT * FROM USER WHERE ID=#{id}")
+    UserEntity selectUser(int id);
+
+    @Update("UPDATE USER SET NAME=#{name}, _ADDRESS=#{address} WHERE ID=#{id}")
+    int updateUser(UserEntity user);
+
+    @Delete("DELETE FROM USER WHERE ID=#{id}")
+    int deleteUser(int id);
 }

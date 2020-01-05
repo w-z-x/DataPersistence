@@ -3,8 +3,7 @@ package entities;
 import lombok.Data;
 
 @Data
-public class User {
-    private int id;
+public class UserEntity extends Entity {
     private String name;
     private String address;
 }

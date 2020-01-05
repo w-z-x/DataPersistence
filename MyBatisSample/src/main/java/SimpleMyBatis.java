@@ -1,60 +1,36 @@
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import entities.User;
+import daos.UserDao;
+import entities.UserEntity;
 import lombok.extern.slf4j.Slf4j;
-import mappers.UserMapper;
-import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 @Slf4j
 public class SimpleMyBatis {
     public static void main(String[] args) throws SQLException {
+        String url = "jdbc:h2:mem:test";
+        String username = "sa";
+        String password = "";
 
-        // 初始化H2数据库
-        final String URL = "jdbc:h2:mem:test";
-//        final String URL = "jdbc:h2:tcp://localhost/~/test";
-        final String USER = "sa";
-        final String PWD = "";
-        try (Connection conn = DriverManager.getConnection(URL+";DB_CLOSE_DELAY=-1", USER, PWD);
-             Statement statement = conn.createStatement()) {
-            statement.execute("DROP TABLE IF EXISTS USER;" +
-                    "CREATE TABLE USER(ID INT PRIMARY KEY, NAME VARCHAR(255), _ADDRESS VARCHAR(255));" +
-                    "INSERT INTO USER VALUES(0, '张三', '杭州');" +
-                    "INSERT INTO USER VALUES(1, '李四', '宁波');" +
-                    "INSERT INTO USER VALUES(2, '王五', '温州')");
-        }
+        DataSourceUtils.initializeH2(url, username, password);
 
-        // 创建HikariCP数据库连接池
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(URL);
-        config.setUsername(USER);
-        config.setPassword(PWD);
-        HikariDataSource dataSource = new HikariDataSource(config);
+        DataSource dataSource = DataSourceUtils.createHikariDataSource(url, username, password);
 
-        // 创建SqlSessionFactory
-        TransactionFactory transactionFactory = new JdbcTransactionFactory();
-        Environment environment = new Environment("development", transactionFactory, dataSource);
-        Configuration configuration = new Configuration(environment);
-        configuration.getTypeAliasRegistry().registerAlias(User.class);
-        configuration.addMapper(UserMapper.class);
-        SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-        SqlSessionFactory sqlSessionFactory = builder.build(configuration);
+        UserDao userDao = new UserDao(dataSource);
+        userDao.retrieve(0);
 
-        // 执行查询
-        try (SqlSession session = sqlSessionFactory.openSession()) {
-            UserMapper mapper = session.getMapper(UserMapper.class);
-            User user = mapper.selectUser(0);
-            log.info("{}", user);
-        }
+        UserEntity user = new UserEntity();
+        user.setId(3);
+        user.setName("马六");
+        user.setAddress("金华");
+        userDao.create(user);
+        userDao.retrieve(3);
+
+        user.setAddress("上海");
+        userDao.update(user);
+        userDao.retrieve(3);
+
+        userDao.delete(3);
+        userDao.retrieve(3);
     }
 }
