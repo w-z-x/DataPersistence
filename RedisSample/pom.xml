@@ -23,6 +23,12 @@
             <artifactId>lettuce-core</artifactId>
             <version>5.2.1.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

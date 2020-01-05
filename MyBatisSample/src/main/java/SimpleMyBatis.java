@@ -1,13 +1,17 @@
+import com.sun.net.httpserver.HttpServer;
+import controllers.UserController;
 import daos.UserDao;
-import entities.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import services.UserService;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.sql.SQLException;
 
 @Slf4j
 public class SimpleMyBatis {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         String url = "jdbc:h2:mem:test";
         String username = "sa";
         String password = "";
@@ -17,20 +21,10 @@ public class SimpleMyBatis {
         DataSource dataSource = DataSourceUtils.createHikariDataSource(url, username, password);
 
         UserDao userDao = new UserDao(dataSource);
-        userDao.retrieve(0);
+        UserService userService = new UserService(userDao);
 
-        UserEntity user = new UserEntity();
-        user.setId(3);
-        user.setName("马六");
-        user.setAddress("金华");
-        userDao.create(user);
-        userDao.retrieve(3);
-
-        user.setAddress("上海");
-        userDao.update(user);
-        userDao.retrieve(3);
-
-        userDao.delete(3);
-        userDao.retrieve(3);
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        server.createContext("/user", new UserController(userService));
+        server.start();
     }
 }
