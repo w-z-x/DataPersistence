@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MyBatis</artifactId>
+    <artifactId>MyBatisSample</artifactId>
 
     <dependencies>
         <dependency>
