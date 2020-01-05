@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
 import java.sql.SQLException;
 
 @Slf4j
-public class SimpleMyBatis {
+public class ServerEntry {
     public static void main(String[] args) throws SQLException, IOException {
         String url = "jdbc:h2:mem:test";
         String username = "sa";

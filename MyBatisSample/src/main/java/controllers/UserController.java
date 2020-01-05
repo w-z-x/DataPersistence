@@ -31,21 +31,22 @@ public class UserController implements HttpHandler {
             result = userService.createUser(user);
         } else if ("GET".equals(method)) {
             Map<String, String> map = str2map(httpExchange.getRequestURI().getQuery());
-            int id = Integer.valueOf(map.get("id"));
+            int id = Integer.parseInt(map.get("id"));
             result = JSON.toJSON(userService.retrieveUser(id));
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.set("Content-Type", "text/json;charset=utf-8");
         } else if ("PUT".equals(method)) {
             String postBody = is2str(httpExchange.getRequestBody());
             UserEntity user = JSON.parseObject(postBody, UserEntity.class);
             result = userService.updateUser(user);
         } else if ("DELETE".equals(method)) {
             Map<String, String> map = str2map(httpExchange.getRequestURI().getQuery());
-            int id = Integer.valueOf(map.get("id"));
+            int id = Integer.parseInt(map.get("id"));
             result = userService.deleteUser(id);
         } else {
             result = "不支持此方法";
         }
-        Headers responseHeaders = httpExchange.getResponseHeaders();
-        responseHeaders.set("Content-Type", "text/json;charset=utf-8");
+
         httpExchange.sendResponseHeaders(200, 0);
         OutputStream os = httpExchange.getResponseBody();
         String response = result.toString();

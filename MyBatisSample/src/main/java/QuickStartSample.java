@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @Slf4j
-public class QuickStart {
+public class QuickStartSample {
     public static void main(String[] args) throws SQLException {
         // 初始化H2数据库
         final String URL = "jdbc:h2:mem:test";
