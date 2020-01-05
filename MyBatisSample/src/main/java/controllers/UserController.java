@@ -43,6 +43,10 @@ public class UserController implements HttpHandler {
             Map<String, String> map = str2map(httpExchange.getRequestURI().getQuery());
             int id = Integer.parseInt(map.get("id"));
             result = userService.deleteUser(id);
+        } else if ("VIEW".equals(method)) {
+            result = JSON.toJSON(userService.findAllUsers());
+            Headers responseHeaders = httpExchange.getResponseHeaders();
+            responseHeaders.set("Content-Type", "text/json;charset=utf-8");
         } else {
             result = "不支持此方法";
         }

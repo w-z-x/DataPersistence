@@ -3,7 +3,9 @@ package services;
 import daos.UserDao;
 import entities.UserEntity;
 
-public class UserService implements Service {
+import java.util.List;
+
+public class UserService {
     private UserDao userDao;
 
     public UserService(UserDao userDao) {
@@ -30,10 +32,8 @@ public class UserService implements Service {
         return result;
     }
 
-    public int updateUsername(int id, String name) {
-        UserEntity user = userDao.retrieve(id);
-        user.setName(name);
-        int result = userDao.update(user);
+    public List<UserEntity> findAllUsers() {
+        List<UserEntity> result = userDao.findAll();
         return result;
     }
 }

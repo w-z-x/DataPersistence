@@ -3,6 +3,8 @@ package mappers;
 import entities.UserEntity;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 public interface UserMapper {
     @Insert("INSERT INTO USER VALUES(#{id}, #{name}, #{address})")
     int insertUser(UserEntity user);
@@ -18,4 +20,8 @@ public interface UserMapper {
 
     @Delete("DELETE FROM USER WHERE ID=#{id}")
     int deleteUser(int id);
+
+    @ResultMap("userResult")
+    @Select("SELECT * FROM USER")
+    List<UserEntity> findAllUser();
 }

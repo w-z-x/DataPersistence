@@ -13,6 +13,8 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import javax.sql.DataSource;
+import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 public class UserDao implements Dao {
@@ -73,5 +75,16 @@ public class UserDao implements Dao {
         }
         log.info("{}", result);
         return result;
+    }
+
+    public List<UserEntity> findAll() {
+        List<UserEntity> users;
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            users = mapper.findAllUser();
+            session.commit();
+        }
+        log.info("{}", users);
+        return users;
     }
 }
