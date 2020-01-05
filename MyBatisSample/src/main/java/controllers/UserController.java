@@ -34,7 +34,7 @@ public class UserController implements HttpHandler {
             int id = Integer.parseInt(map.get("id"));
             result = JSON.toJSON(userService.retrieveUser(id));
             Headers responseHeaders = httpExchange.getResponseHeaders();
-            responseHeaders.set("Content-Type", "text/json;charset=utf-8");
+            responseHeaders.set("Content-Type", "application/json;charset=utf-8");
         } else if ("PUT".equals(method)) {
             String postBody = is2str(httpExchange.getRequestBody());
             UserEntity user = JSON.parseObject(postBody, UserEntity.class);
