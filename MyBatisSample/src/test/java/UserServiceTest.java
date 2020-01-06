@@ -1,7 +1,6 @@
 import daos.UserDao;
 import entities.UserEntity;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -18,10 +17,22 @@ public class UserServiceTest {
     public UserServiceTest() {
     }
 
+    @BeforeClass
+    public static void setUpClass() {
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+    }
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         userService = new UserService(userDao);
+    }
+
+    @After
+    public void tearDown() {
     }
 
     @Test
