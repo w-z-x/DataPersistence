@@ -13,27 +13,22 @@ public class UserService {
     }
 
     public int createUser(UserEntity user) {
-        int result = userDao.create(user);
-        return result;
+        return userDao.create(user);
     }
 
     public UserEntity retrieveUser(int id) {
-        UserEntity user = userDao.retrieve(id);
-        return user;
+        return userDao.retrieve(id);
     }
 
     public int updateUser(UserEntity user) {
-        int result = userDao.update(user);
-        return result;
+        return userDao.update(user);
     }
 
     public int deleteUser(int id) {
-        int result = userDao.delete(id);
-        return result;
+        return userDao.delete(id);
     }
 
     public List<UserEntity> findAllUsers() {
-        List<UserEntity> result = userDao.findAll();
-        return result;
+        return userDao.findAll();
     }
 }

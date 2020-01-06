@@ -1,3 +1,5 @@
+package services;
+
 import daos.UserDao;
 import entities.UserEntity;
 import org.junit.*;

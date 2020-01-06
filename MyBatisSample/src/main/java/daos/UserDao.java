@@ -13,7 +13,6 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
 import javax.sql.DataSource;
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
