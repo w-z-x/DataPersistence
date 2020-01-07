@@ -6,7 +6,6 @@ import org.junit.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import services.UserService;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
