@@ -12,7 +12,7 @@ import java.sql.SQLException;
 @Slf4j
 public class ServerEntry {
     public static void main(String[] args) throws SQLException, IOException {
-        String url = "jdbc:h2:mem:test";
+        String url = "jdbc:h2:mem:test;NON_KEYWORDS=USER";
         String username = "sa";
         String password = "";
 
